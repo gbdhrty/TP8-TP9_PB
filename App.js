@@ -1,20 +1,38 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { InitialPage } from './src/screens/InitialPage';
+import { SignInScreen } from './src/screens/SignInScreen';
+import { SignUpScreen } from './src/screens/SignUpScreen';
+import { BookDetails } from './src/components/BookDetails';
+import { Home } from './src/screens/Home';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen 
+          name="InitialPage" 
+          component={InitialPage} 
+          options={{ title: "Página Inicial" }}
+        />
+        <Stack.Screen name="Entrar" component={SignInScreen} />
+        <Stack.Screen name="Criar Conta" component={SignUpScreen} />
+        <Stack.Screen 
+          name="Home"
+          component={Home}
+          options={{ 
+            title: "My Books",
+            headerLeft: null
+          }}
+        />
+        <Stack.Screen 
+          name="Details" 
+          component={BookDetails} 
+          options={{ title: "Detalhes" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
