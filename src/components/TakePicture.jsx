@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { Camera } from 'expo-camera';
 import { Button } from "./Button";
 
-export const images = [];
+const images = [];
+export { images };
 
 export function TakePicture() {
     const [cameraPermission, setCameraPermission] = useState(false);

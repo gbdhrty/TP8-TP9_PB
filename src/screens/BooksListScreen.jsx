@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, TextInput, View } from "react-native";
+import { StyleSheet, Text, TextInput, View } from "react-native";
 import { BookList } from "../components/BookList";
 
 export function BooksListScreen(props) {
     const { navigation } = props;
     const [books, setBooks] = useState(null);
     const [bookFilter, setBookFilter] = useState('');
+    const [msg, setMsg] = useState(null);
 
     const onPressBook = (book) => {
         navigation.navigate("Details", { book: book })
@@ -13,10 +14,14 @@ export function BooksListScreen(props) {
 
     useEffect(() => {
         async function loadBooks() {
-          const url = 'https://t3t4-dfe-pb-grl-m1-default-rtdb.firebaseio.com/books.json';
-          const request = await fetch(url);
-          const booksJson = await request.json();
-          setBooks(Object.values(booksJson));
+          try {
+            const url = 'https://t3t4-dfe-pb-grl-m1-default-rtdb.firebaseio.com/books.json';
+            const request = await fetch(url);
+            const booksJson = await request.json();
+            setBooks(Object.values(booksJson));
+          } catch (error) {
+            setMsg(error.message)
+          }
         }
     
         loadBooks();
@@ -43,6 +48,7 @@ export function BooksListScreen(props) {
                 value={bookFilter}
                 onChangeText={setBookFilter}
             />
+            {msg && <Text style={styles.errorMsg}>{msg}</Text>}
             {books && <BookList books={filteredBookList()} action={onPressBook} />}
         </View>
     );
@@ -60,5 +66,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
+    },
+    errorMsg: {
+        fontSize: 16,
+        color: 'red',
+        fontWeight: 'bold',
     },
 });
